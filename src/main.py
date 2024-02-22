@@ -1,8 +1,8 @@
 from datetime import datetime
 from flask import Flask, request, Response, jsonify
-from src.controllers import UserController
-from src.repositories import UserRepository
-from src.users import User
+from controllers import UserController
+from repositories import UserRepository
+from users import User
 
 app = Flask(__name__)
 user_repository = UserRepository()
