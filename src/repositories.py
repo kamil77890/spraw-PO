@@ -1,37 +1,52 @@
-from .users import User
+from users import User
 
-class UserService:
-    def __init__(self):
-        self.users = {}
+users = [
+    {
+        "id": 1, "firstName": "Kamil", "lastName": "Jakubisiak", "birthYear": "11-10-2007", "group": "admin"
+    },
+    {
+        "id": 2, "firstName": "Władysław", "lastName": "Wojtyła", "birthYear": "11-10-2169", "group": "god"
+    }
+]
 
-    def create_user(self, data):
-        user_id = len(self.users) + 1
-        user = User(user_id, data['firstName'], data['lastName'], data['birthYear'], data['group'])
-        self.users[user_id] = user
+class UserRepository:
+    def create_user(self, user_data):
+        user_id = len(users) + 1
+        user = User(
+            user_id,
+            user_data["firstName"],
+            user_data["lastName"],
+            user_data["birthYear"],
+            user_data["group"]
+        )
+        users.append(user)
         return user
 
-    def get_user(self, user_id):
-        return self.users.get(user_id)
+    def get_all_users(self):
+        return users
 
-    def update_user(self, user_id, data):
-        user = self.get_user(user_id)
+    def get_user_by_id(self, user_id):
+        for user in users:
+            if user.id == user_id:
+                return user
+        return None
+
+    def update_user(self, user_id, user_data):
+        user = self.get_user_by_id(user_id)
         if user:
-            if 'firstName' in data:
-                user.first_name = data['firstName']
-            if 'lastName' in data:
-                user.last_name = data['lastName']
-            if 'birthYear' in data:
-                user.birth_year = data['birthYear']
-            if 'group' in data:
-                user.group = data['group']
+            user.first_name = user_data.get("firstName", user.first_name)
+            user.last_name = user_data.get("lastName", user.last_name)
+            user.birth_year = user_data.get("birthYear", user.birth_year)
+
+            if "group" in user_data:
+                user.group = user_data["group"]
+
             return user
         return None
 
     def delete_user(self, user_id):
-        if user_id in self.users:
-            del self.users[user_id]
+        user = self.get_user_by_id(user_id)
+        if user:
+            users.remove(user)
             return True
         return False
-
-    def get_all_users(self):
-        return [user.to_json() for user in self.users.values()]

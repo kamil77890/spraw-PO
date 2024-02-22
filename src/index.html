@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management Frontend</title>
+  </head>
+  <body>
+    <h1>User Management</h1>
+
+    <h2>Get All Users</h2>
+    <button onclick="getAllUsers()">Get All Users</button>
+    <div id="allUsers"></div>
+
+    <h2>Get User By ID</h2>
+    <input type="text" id="userIdInput" placeholder="Enter User ID" />
+    <button onclick="getUserById()">Get User By ID</button>
+    <div id="userById"></div>
+
+    <h2>Create User</h2>
+    <input type="text" id="firstNameInput" placeholder="Enter First Name" />
+    <input type="text" id="lastNameInput" placeholder="Enter Last Name" />
+    <input type="text" id="birthYearInput" placeholder="Enter Birth Year" />
+    <input
+      type="text"
+      id="groupInput"
+      placeholder="Enter Group (user/premium/admin)"
+    />
+    <button onclick="createUser()">Create User</button>
+
+    <h2>Update User</h2>
+    <input type="text" id="updateUserIdInput" placeholder="Enter User ID" />
+    <input
+      type="text"
+      id="updateFirstNameInput"
+      placeholder="Enter New First Name"
+    />
+    <input
+      type="text"
+      id="updateLastNameInput"
+      placeholder="Enter New Last Name"
+    />
+    <input
+      type="text"
+      id="updateBirthYearInput"
+      placeholder="Enter New Birth Year"
+    />
+    <input
+      type="text"
+      id="updateGroupInput"
+      placeholder="Enter New Group (user/premium/admin)"
+    />
+    <button onclick="updateUser()">Update User</button>
+
+    <h2>Delete User</h2>
+    <input type="text" id="deleteUserIdInput" placeholder="Enter User ID" />
+    <button onclick="deleteUser()">Delete User</button>
+
+    <script>
+      function getAllUsers() {
+        fetch("/users")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("allUsers").innerHTML =
+              JSON.stringify(data);
+          });
+      }
+
+      function getUserById() {
+        const userId = document.getElementById("userIdInput").value;
+        fetch(`/users/${userId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("userById").innerHTML =
+              JSON.stringify(data);
+          });
+      }
+
+      function createUser() {
+        const firstName = document.getElementById("firstNameInput").value;
+        const lastName = document.getElementById("lastNameInput").value;
+        const birthYear = document.getElementById("birthYearInput").value;
+        const group = document.getElementById("groupInput").value;
+        const userData = {
+          firstName: firstName,
+          lastName: lastName,
+          birthYear: parseInt(birthYear),
+          group: group,
+        };
+        fetch("/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        })
+          .then(() => alert("User created successfully"))
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function updateUser() {
+        const userId = document.getElementById("updateUserIdInput").value;
+        const firstName = document.getElementById("updateFirstNameInput").value;
+        const lastName = document.getElementById("updateLastNameInput").value;
+        const birthYear = document.getElementById("updateBirthYearInput").value;
+        const group = document.getElementById("updateGroupInput").value;
+        const userData = {
+          firstName: firstName,
+          lastName: lastName,
+          birthYear: parseInt(birthYear),
+          group: group,
+        };
+        fetch(`/users/${userId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
+        })
+          .then(() => alert("User updated successfully"))
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function deleteUser() {
+        const userId = document.getElementById("deleteUserIdInput").value;
+        fetch(`/users/${userId}`, {
+          method: "DELETE",
+        })
+          .then(() => alert("User deleted successfully"))
+          .catch((error) => console.error("Error:", error));
+      }
+    </script>
+  </body>
+</html>
