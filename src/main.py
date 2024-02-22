@@ -16,8 +16,6 @@ def get_user_by_id(user_id):
     user = user_controller.get_by_id(user_id)
     if user:
         return jsonify(user)
-    else:
-        return jsonify({"message": "User not found"}), 404
 
 @app.route("/users", methods=["POST"])
 def create_user():
@@ -31,16 +29,12 @@ def update_user(user_id):
     user = user_controller.update(user_id, user_data)
     if user:
         return jsonify(user)
-    else:
-        return jsonify({"message": "User not found"}), 404
 
 @app.route("/users/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
-    success = user_controller.delete(user_id)
-    if success:
+    deleting_some_people = user_controller.delete(user_id)
+    if deleting_some_people:
         return "", 204
-    else:
-        return jsonify({"message": "User not found"}), 404
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -27,7 +27,7 @@ class UserRepository:
 
     def get_user_by_id(self, user_id):
         for user in users:
-            if user.id == user_id:
+            if user['id'] == user_id:
                 return user
         return None
 
