@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class User:
     def __init__(self, id, first_name, last_name, birth_year, group):
         self.id = id
@@ -11,6 +13,6 @@ class User:
             "id": self.id,
             "firstName": self.first_name,
             "lastName": self.last_name,
-            "age": 2024 - self.birth_year,
+            "age": datetime.year() - self.birth_year,
             "group": self.group
         }
